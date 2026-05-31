@@ -20,6 +20,7 @@
       border-radius: 8px;
       padding: 1.5rem;
       margin-bottom: 2rem;
+      display: none;
     }
     .form-box input, .form-box textarea, .form-box select {
       width: 100%;
@@ -45,6 +46,35 @@
       font-weight: bold;
     }
     .save-btn:hover { background: #b8944f; }
+    .login-btn {
+      background: transparent;
+      color: #c9a96e;
+      border: 1px solid #c9a96e;
+      padding: 0.6rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-bottom: 2rem;
+      display: block;
+    }
+    .login-btn:hover { background: rgba(201,169,110,0.1); }
+    .logout-btn {
+      background: transparent;
+      color: #6b6b78;
+      border: 1px solid #2a2a32;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-left: 1rem;
+    }
+    .user-bar {
+      font-size: 0.82rem;
+      color: #6b6b78;
+      margin-bottom: 1.5rem;
+      display: none;
+      align-items: center;
+    }
     .entry {
       background: #141417;
       border-left: 3px solid #c9a96e;
@@ -77,7 +107,14 @@
   <h1>my.dictionary</h1>
   <p class="subtitle">a personal archive of everything</p>
 
-  <div class="form-box">
+  <div class="user-bar" id="userBar">
+    Logged in as <strong id="userEmail" style="color:#e8e6e0; margin-left:4px"></strong>
+    <button class="logout-btn" onclick="logout()">logout</button>
+  </div>
+
+  <button class="login-btn" id="loginBtn" onclick="login()">Login with Google to add entries</button>
+
+  <div class="form-box" id="formBox">
     <input type="text" id="title" placeholder="Entry title..." />
     <select id="category">
       <option value="ideas">ideas</option>
@@ -97,6 +134,8 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, orderBy, query }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBuqRC47OFwMKImaHMlpVQuKYb8blrN_Xk",
@@ -109,6 +148,29 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        document.getElementById("loginBtn").style.display = "none";
+        document.getElementById("formBox").style.display = "block";
+        document.getElementById("userBar").style.display = "flex";
+        document.getElementById("userEmail").textContent = user.email;
+      } else {
+        document.getElementById("loginBtn").style.display = "block";
+        document.getElementById("formBox").style.display = "none";
+        document.getElementById("userBar").style.display = "none";
+      }
+    });
+
+    window.login = async function() {
+      await signInWithPopup(auth, provider);
+    }
+
+    window.logout = async function() {
+      await signOut(auth);
+    }
 
     async function loadEntries() {
       const q = query(collection(db, "entries"), orderBy("date", "desc"));
