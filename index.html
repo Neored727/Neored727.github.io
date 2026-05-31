@@ -81,15 +81,16 @@
       padding: 1rem 1.5rem;
       margin-top: 1rem;
       border-radius: 6px;
+      position: relative;
     }
     .entry.tech { border-left-color: #7c6fcd; }
     .entry.life { border-left-color: #6db87a; }
     .entry.ideas { border-left-color: #c9a96e; }
     .entry.people { border-left-color: #d46e6e; }
     .entry.books { border-left-color: #6eaed4; }
-    .entry h2 { color: #e8e6e0; font-size: 1rem; margin-bottom: 0.4rem; }
+    .entry h2 { color: #e8e6e0; font-size: 1rem; margin-bottom: 0.4rem; padding-right: 2rem; }
     .entry p { color: #9a9a9a; font-size: 0.88rem; line-height: 1.6; }
-    .entry-meta { font-size: 0.75rem; color: #6b6b78; margin-top: 0.5rem; }
+    .entry-meta { font-size: 0.75rem; color: #6b6b78; margin-top: 0.5rem; display: flex; align-items: center; justify-content: space-between; }
     .tag {
       display: inline-block;
       font-size: 0.72rem;
@@ -99,6 +100,18 @@
       color: #6b6b78;
       margin-right: 6px;
     }
+    .delete-btn {
+      background: transparent;
+      border: 1px solid #3a1e1e;
+      color: #d46e6e;
+      padding: 3px 10px;
+      border-radius: 5px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: none;
+    }
+    .delete-btn:hover { background: rgba(212,110,110,0.1); }
+    .logged-in .delete-btn { display: inline-block; }
     #status { font-size: 0.85rem; color: #6db87a; margin-top: 0.5rem; }
   </style>
 </head>
@@ -132,7 +145,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, orderBy, query }
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -150,18 +163,24 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
+    let isLoggedIn = false;
 
     onAuthStateChanged(auth, user => {
       if (user) {
+        isLoggedIn = true;
         document.getElementById("loginBtn").style.display = "none";
         document.getElementById("formBox").style.display = "block";
         document.getElementById("userBar").style.display = "flex";
         document.getElementById("userEmail").textContent = user.email;
+        document.getElementById("entries").classList.add("logged-in");
       } else {
+        isLoggedIn = false;
         document.getElementById("loginBtn").style.display = "block";
         document.getElementById("formBox").style.display = "none";
         document.getElementById("userBar").style.display = "none";
+        document.getElementById("entries").classList.remove("logged-in");
       }
+      loadEntries();
     });
 
     window.login = async function() {
@@ -177,18 +196,28 @@
       const snapshot = await getDocs(q);
       const container = document.getElementById("entries");
       container.innerHTML = "";
-      snapshot.forEach(doc => {
-        const d = doc.data();
+      snapshot.forEach(docSnap => {
+        const d = docSnap.data();
+        const id = docSnap.id;
         container.innerHTML += `
           <div class="entry ${d.category}">
             <h2>${d.title}</h2>
             <p>${d.body}</p>
             <div class="entry-meta">
-              <span class="tag">${d.category}</span>
-              ${new Date(d.date).toLocaleDateString()}
+              <div>
+                <span class="tag">${d.category}</span>
+                ${new Date(d.date).toLocaleDateString()}
+              </div>
+              <button class="delete-btn" onclick="deleteEntry('${id}')">delete</button>
             </div>
           </div>`;
       });
+    }
+
+    window.deleteEntry = async function(id) {
+      if (!confirm("Delete this entry?")) return;
+      await deleteDoc(doc(db, "entries", id));
+      loadEntries();
     }
 
     window.saveEntry = async function() {
@@ -216,8 +245,6 @@
       status.textContent = "Saved!";
       loadEntries();
     }
-
-    loadEntries();
   </script>
 
 </body>
