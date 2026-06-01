@@ -23,7 +23,7 @@ const statusEl = document.getElementById("status");
 initAuth(
   // onLogin callback — runs when user logs in
   async (user) => {
-    if (user.email !== "Neored727@gmail.com") {
+    if (user.email.toLowerCase() !== "neored727@gmail.com") {
       await logout();
       alert("Access denied. This is a private dictionary.");
       return;
