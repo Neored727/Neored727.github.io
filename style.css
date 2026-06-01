@@ -1,0 +1,267 @@
+/* ── Fonts ────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap');
+
+/* ── Variables ────────────────────────────────────────────────── */
+:root {
+  --bg:        #080809;
+  --surface:   #0f0f11;
+  --surface2:  #161619;
+  --border:    #222228;
+  --accent:    #c9a96e;
+  --accent2:   #4ade80;
+  --text:      #e2e0d8;
+  --muted:     #52525e;
+  --danger:    #f87171;
+
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-serif: 'Playfair Display', serif;
+}
+
+/* ── Reset ────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+}
+
+/* ── Login Screen ─────────────────────────────────────────────── */
+#login-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1rem;
+}
+
+#login-screen h1 {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  color: var(--accent);
+  letter-spacing: -1px;
+}
+
+#login-screen p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+#login-screen button {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 0.75rem 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+}
+
+#login-screen button:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ── Blog Screen ──────────────────────────────────────────────── */
+#blog-screen {
+  display: none;
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* ── Header ───────────────────────────────────────────────────── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+}
+
+header div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+#user-email {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+header button {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 4px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+header button:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+/* ── Entry Form ───────────────────────────────────────────────── */
+#entry-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+#entry-form input,
+#entry-form select,
+#entry-form textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-top: none;
+  color: var(--text);
+  padding: 0.75rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+  display: block;
+}
+
+#entry-form input { border-top: 1px solid var(--border); }
+
+#entry-form input:focus,
+#entry-form select:focus,
+#entry-form textarea:focus {
+  border-color: var(--accent);
+}
+
+#entry-form textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+#entry-form select option {
+  background: var(--surface);
+}
+
+#entry-form button {
+  margin-top: 1rem;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  padding: 0.75rem 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: opacity 0.2s ease;
+}
+
+#entry-form button:hover { opacity: 0.85; }
+
+#status {
+  margin-top: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--accent2);
+  min-height: 1rem;
+}
+
+/* ── Entry Cards ──────────────────────────────────────────────── */
+.entry {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.entry:hover {
+  background: var(--surface2);
+  border-color: var(--accent);
+}
+
+/* Category colors */
+.entry.tech    { border-left-color: #818cf8; }
+.entry.life    { border-left-color: #4ade80; }
+.entry.ideas   { border-left-color: #c9a96e; }
+.entry.people  { border-left-color: #f87171; }
+.entry.books   { border-left-color: #38bdf8; }
+
+.entry h2 {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.entry p {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.entry-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.entry-meta div {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tag {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.entry-meta span {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.entry-meta button {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  padding: 2px 8px;
+  transition: all 0.2s ease;
+}
+
+.entry-meta button:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
