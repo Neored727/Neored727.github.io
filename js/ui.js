@@ -30,7 +30,7 @@ initAuth(
   },
   // onLogout callback — runs when user logs out
   () => {
-    loginScreen.style.display = "block";
+    loginScreen.style.display = "flex";
     blogScreen.style.display = "none";
   }
 );
