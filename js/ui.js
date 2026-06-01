@@ -29,7 +29,7 @@ initAuth(
       return;
     }
     loginScreen.style.display = "none";
-    blogScreen.style.display = "flex";
+    blogScreen.style.display = "block";
     userEmailEl.textContent = user.email;
     await renderEntries();
   },
