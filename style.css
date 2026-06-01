@@ -35,6 +35,7 @@ body {
   justify-content: center;
   min-height: 100vh;
   gap: 1rem;
+  padding: 2rem;
 }
 
 #login-screen h1 {
