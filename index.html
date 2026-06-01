@@ -8,17 +8,16 @@
 </head>
 <body>
 
-  <!-- LOGIN SCREEN — shown when logged out -->
-  <div id="login-screen" style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh;">
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen">
     <h1>my.dictionary</h1>
     <p>a personal archive of everything</p>
     <button onclick="handleLogin()">Login with Google</button>
   </div>
 
-  <!-- BLOG SCREEN — shown when logged in -->
+  <!-- BLOG SCREEN -->
   <div id="blog-screen">
 
-    <!-- Header -->
     <header>
       <h1>my.dictionary</h1>
       <div>
@@ -27,9 +26,8 @@
       </div>
     </header>
 
-    <!-- New entry form -->
     <div id="entry-form">
-      <input type="text" id="title" placeSholder="entry title..." />
+      <input type="text" id="title" placeholder="entry title..." />
       <select id="category">
         <option value="ideas">ideas</option>
         <option value="tech">tech</option>
@@ -42,13 +40,10 @@
       <p id="status"></p>
     </div>
 
-    <!-- Entries list -->
     <div id="entries-container"></div>
 
   </div>
 
-  <!-- Single script entry point -->
   <script type="module" src="js/ui.js"></script>
-
 </body>
 </html>
