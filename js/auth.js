@@ -2,7 +2,7 @@
 // One job: handle login, logout and protect the page
 
 import { auth } from "./firebase.js";
-
+import { writeLog, EVENT, SEVERITY  } from "./logger.js";
 // GoogleAuthProvider → tells Firebase "we want to use Google as the login method"
 // signInWithPopup → opens the Google login popup window
 // signOut → logs the user out
@@ -28,6 +28,7 @@ export async function login() {
 }
 
 // Logout
-export async function logout() {
+export async function logout(email = "unknown") {
+  await writeLog (EVENT.LOGOUT, SEVERITY.INFO, {email: email});
   await signOut(auth);
 }

@@ -2,6 +2,7 @@
 // One job: connect data to the screen
 
 import { initAuth, login, logout } from "./auth.js";
+import { writeLog, EVENT, SEVERITY } from "./logger.js";
 import { saveEntry, loadEntries, deleteEntry } from "./entries.js";
 
 // ── Element references ──────────────────────────────────────────
@@ -21,19 +22,24 @@ const statusEl = document.getElementById("status");
 // initAuth watches login state and calls these callbacks
 
 initAuth(
-  // onLogin callback — runs when user logs in
   async (user) => {
     if (user.email.toLowerCase() !== "neored727@gmail.com") {
-      await logout();
+      await writeLog(EVENT.LOGIN_DENIED, SEVERITY.CRITICAL, {
+        email: user.email,
+        reason: "Unauthorized email"
+      });
+      await logout(user.email);
       alert("Access denied. This is a private dictionary.");
       return;
     }
+    await writeLog(EVENT.LOGIN_SUCCESS, SEVERITY.INFO, {
+      email: user.email
+    });
     loginScreen.style.display = "none";
     blogScreen.style.display = "block";
     userEmailEl.textContent = user.email;
     await renderEntries();
   },
-  // onLogout callback — runs when user logs out
   () => {
     loginScreen.style.display = "flex";
     blogScreen.style.display = "none";
@@ -53,7 +59,7 @@ async function renderEntries() {
         <div class="entry-meta">
           <span class="tag">${entry.category}</span>
           <span>${new Date(entry.date).toLocaleDateString()}</span>
-          <button onclick="handleDelete('${entry.id}')">delete</button>
+          <button onclick="handleDelete('${entry.id}', '${entry.title}', '${entry.category}')">delete</button>
         </div>
       </div>`;
   });
@@ -84,13 +90,13 @@ window.handleSave = async function() {
 
 // ── Delete handler ──────────────────────────────────────────────
 window.handleDelete = async function(id) {
-  const deleted = await deleteEntry(id);
+  const deleted = await deleteEntry(id, title, category);
   if (deleted) await renderEntries();
 }
 
 // ── Logout handler ──────────────────────────────────────────────
 window.handleLogout = async function() {
-  await logout();
+  await logout(userEmailEl.textContent);
 }
 
 // ── Login handler ───────────────────────────────────────────────
