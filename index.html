@@ -26,24 +26,36 @@
       </div>
     </header>
 
+    <!-- Category Management Section -->
+    <div id="category-manager">
+      <div id="category-form">
+        <div class="form-label">// new category</div>
+        <input type="text" id="cat-name" placeholder="category name..." />
+        <input type="color" id="cat-color" value="#00ff41" />
+        <input type="text" id="cat-icon" placeholder="icon (emoji)..." maxlength="2" />
+        <button onclick="handleSaveCategory()">[ add ]</button>
+        <p id="cat-status"></p>
+      </div>
+      <div id="category-list"></div>
+    </div>
+
+    <!-- New Entry Form -->
     <div id="entry-form">
+      <div class="form-label">// new entry</div>
       <input type="text" id="title" placeholder="entry title..." />
       <select id="category">
-        <option value="ideas">ideas</option>
-        <option value="tech">tech</option>
-        <option value="life">life</option>
-        <option value="people">people</option>
-        <option value="books">books</option>
+        <option value="uncategorized">uncategorized</option>
       </select>
       <textarea id="body" placeholder="write anything..."></textarea>
-      <button onclick="handleSave()">Save Entry</button>
+      <button onclick="handleSave()">[ Save Entry ]</button>
       <p id="status"></p>
     </div>
 
+    <!-- Entries list -->
     <div id="entries-container"></div>
 
   </div>
 
-  <script type="module" src="js/ui.js?v=20260601"></script>
+  <script type="module" src="js/ui.js?v=20260603"></script>
 </body>
 </html>
